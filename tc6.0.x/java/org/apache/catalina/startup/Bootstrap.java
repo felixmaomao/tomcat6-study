@@ -87,6 +87,8 @@ public final class Bootstrap {
     // -------------------------------------------------------- Private Methods
 
 
+    //初始化类加载器
+    //这边就是tomcat在java三级类加载器上扩展的自己的三个类加载器,common classLoader,shared classLoader, server classLoader.
     private void initClassLoaders() {
         try {
             commonLoader = createClassLoader("common", null);
@@ -102,7 +104,11 @@ public final class Bootstrap {
         }
     }
 
-
+    /**
+     * @Author shenwei
+     * @Date 2018/1/25 16:02
+     * @Description 创建类加载器
+     */
     private ClassLoader createClassLoader(String name, ClassLoader parent)
             throws Exception {
 

@@ -912,6 +912,7 @@ public class Embedded  extends StandardService implements Lifecycle {
     }
 
 
+    //初始化catalina相关路径
     protected void initDirs() {
 
         String catalinaHome = System.getProperty("catalina.home");
