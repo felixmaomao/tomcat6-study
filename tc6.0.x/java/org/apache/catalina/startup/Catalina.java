@@ -487,7 +487,7 @@ public class Catalina extends Embedded {
         InputStream inputStream = null;
         File file = null;
         try {
-            file = configFile();   //server.xml
+            file = configFile();   //加载server.xml
             inputStream = new FileInputStream(file);
             inputSource = new InputSource("file://" + file.getAbsolutePath());
         } catch (Exception e) {

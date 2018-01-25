@@ -48,17 +48,14 @@ import org.apache.tomcat.util.buf.StringCache;
 import org.apache.tomcat.util.modeler.Registry;
 
 
-
 /**
  * Standard implementation of the <b>Server</b> interface, available for use
  * (but not required) when deploying and starting Catalina.
  *
  * @author Craig R. McClanahan
- *
  */
 public final class StandardServer
-    implements Lifecycle, Server, MBeanRegistration
- {
+        implements Lifecycle, Server, MBeanRegistration {
     private static Log log = LogFactory.getLog(StandardServer.class);
 
 
@@ -69,7 +66,7 @@ public final class StandardServer
      * ServerLifecycleListener classname.
      */
     private static String SERVER_LISTENER_CLASS_NAME =
-        "org.apache.catalina.mbeans.ServerLifecycleListener";
+            "org.apache.catalina.mbeans.ServerLifecycleListener";
 
 
     // ------------------------------------------------------------ Constructor
@@ -115,7 +112,7 @@ public final class StandardServer
      * Descriptive information about this Server implementation.
      */
     private static final String info =
-        "org.apache.catalina.core.StandardServer/1.0";
+            "org.apache.catalina.core.StandardServer/1.0";
 
 
     /**
@@ -159,7 +156,7 @@ public final class StandardServer
      * The string manager for this package.
      */
     private static final StringManager sm =
-        StringManager.getManager(Constants.Package);
+            StringManager.getManager(Constants.Package);
 
 
     /**
@@ -210,7 +207,7 @@ public final class StandardServer
      * @param globalNamingContext The new global naming resource context
      */
     public void setGlobalNamingContext
-        (javax.naming.Context globalNamingContext) {
+    (javax.naming.Context globalNamingContext) {
 
         this.globalNamingContext = globalNamingContext;
 
@@ -233,15 +230,15 @@ public final class StandardServer
      * @param globalNamingResources The new global naming resources
      */
     public void setGlobalNamingResources
-        (NamingResources globalNamingResources) {
+    (NamingResources globalNamingResources) {
 
         NamingResources oldGlobalNamingResources =
-            this.globalNamingResources;
+                this.globalNamingResources;
         this.globalNamingResources = globalNamingResources;
         this.globalNamingResources.setContainer(this);
         support.firePropertyChange("globalNamingResources",
-                                   oldGlobalNamingResources,
-                                   this.globalNamingResources);
+                oldGlobalNamingResources,
+                this.globalNamingResources);
 
     }
 
@@ -259,6 +256,7 @@ public final class StandardServer
 
     /**
      * Report the current Tomcat Server Release number
+     *
      * @return Tomcat release identifier
      */
     public String getServerInfo() {
@@ -351,7 +349,7 @@ public final class StandardServer
     }
 
     public void stopAwait() {
-        stopAwait=true;
+        stopAwait = true;
         Thread t = awaitThread;
         if (t != null) {
             ServerSocket s = awaitSocket;
@@ -379,17 +377,17 @@ public final class StandardServer
      */
     public void await() {
         // Negative values - don't wait on port - tomcat is embedded or we just don't like ports
-        if( port == -2 ) {
+        if (port == -2) {
             // undocumented yet - for embedding apps that are around, alive.
             return;
         }
-        if( port==-1 ) {
+        if (port == -1) {
             try {
                 awaitThread = Thread.currentThread();
-                while(!stopAwait) {
+                while (!stopAwait) {
                     try {
-                        Thread.sleep( 10000 );
-                    } catch( InterruptedException ex ) {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException ex) {
                         // continue and check the flag
                     }
                 }
@@ -402,11 +400,11 @@ public final class StandardServer
         // Set up a server socket to wait on
         try {
             awaitSocket =
-                new ServerSocket(port, 1,
-                                 InetAddress.getByName("localhost"));
+                    new ServerSocket(port, 1,
+                            InetAddress.getByName("localhost"));
         } catch (IOException e) {
             log.error("StandardServer.await: create[" + port
-                               + "]: ", e);
+                    + "]: ", e);
             return;
         }
 
@@ -438,7 +436,7 @@ public final class StandardServer
                         continue;
                     } catch (AccessControlException ace) {
                         log.warn("StandardServer.accept security exception: "
-                                           + ace.getMessage(), ace);
+                                + ace.getMessage(), ace);
                         continue;
                     } catch (IOException e) {
                         if (stopAwait) {
@@ -488,7 +486,7 @@ public final class StandardServer
                     break;
                 } else
                     log.warn("StandardServer.await: Invalid command '" +
-                                       command.toString() + "' received");
+                            command.toString() + "' received");
             }
         } finally {
             ServerSocket serverSocket = awaitSocket;
@@ -543,9 +541,9 @@ public final class StandardServer
      * Return the JMX service names.
      */
     public ObjectName[] getServiceNames() {
-        ObjectName onames[]=new ObjectName[ services.length ];
-        for( int i=0; i<services.length; i++ ) {
-            onames[i]=((StandardService)services[i]).getObjectName();
+        ObjectName onames[] = new ObjectName[services.length];
+        for (int i = 0; i < services.length; i++) {
+            onames[i] = ((StandardService) services[i]).getObjectName();
         }
         return onames;
     }
@@ -635,13 +633,10 @@ public final class StandardServer
      * Write the configuration information for this entire <code>Server</code>
      * out to the server.xml configuration file.
      *
-     * @exception   javax.management.InstanceNotFoundException
-     *              if the managed resource object cannot be found
-     * @exception   javax.management.MBeanException
-     *              if the initializer of the object throws an exception, or
-     *              persistence is not supported
-     * @exception   javax.management.RuntimeOperationsException
-     *              if an exception is reported by the persistence mechanism
+     * @throws javax.management.InstanceNotFoundException  if the managed resource object cannot be found
+     * @throws javax.management.MBeanException             if the initializer of the object throws an exception, or
+     *                                                     persistence is not supported
+     * @throws javax.management.RuntimeOperationsException if an exception is reported by the persistence mechanism
      */
     public synchronized void storeConfig() throws Exception {
         ObjectName sname = new ObjectName("Catalina:type=StoreConfig");
@@ -653,24 +648,24 @@ public final class StandardServer
      * Write the configuration information for <code>Context</code>
      * out to the specified configuration file.
      *
-     * @exception javax.management.InstanceNotFoundException if the managed resource object
-     *  cannot be found
-     * @exception javax.management.MBeanException if the initializer of the object throws
-     *  an exception, or persistence is not supported
-     * @exception javax.management.RuntimeOperationsException if an exception is reported
-     *  by the persistence mechanism
+     * @throws javax.management.InstanceNotFoundException  if the managed resource object
+     *                                                     cannot be found
+     * @throws javax.management.MBeanException             if the initializer of the object throws
+     *                                                     an exception, or persistence is not supported
+     * @throws javax.management.RuntimeOperationsException if an exception is reported
+     *                                                     by the persistence mechanism
      */
     public synchronized void storeContext(Context context) throws Exception {
 
         ObjectName sname = null;
         try {
-           sname = new ObjectName("Catalina:type=StoreConfig");
-           if(mserver.isRegistered(sname)) {
-               mserver.invoke(sname, "store",
-                   new Object[] {context},
-                   new String [] { "java.lang.String"});
-           } else
-               log.error("StoreConfig mbean not registered" + sname);
+            sname = new ObjectName("Catalina:type=StoreConfig");
+            if (mserver.isRegistered(sname)) {
+                mserver.invoke(sname, "store",
+                        new Object[]{context},
+                        new String[]{"java.lang.String"});
+            } else
+                log.error("StoreConfig mbean not registered" + sname);
         } catch (Throwable t) {
             log.error(t);
         }
@@ -686,7 +681,7 @@ public final class StandardServer
         // Reading the "catalina.useNaming" environment variable
         String useNamingProperty = System.getProperty("catalina.useNaming");
         if ((useNamingProperty != null)
-            && (useNamingProperty.equals("false"))) {
+                && (useNamingProperty.equals("false"))) {
             useNaming = false;
         }
         return useNaming;
@@ -737,8 +732,8 @@ public final class StandardServer
      * methods of this component are utilized.  It should also send a
      * LifecycleEvent of type START_EVENT to any registered listeners.
      *
-     * @exception LifecycleException if this component detects a fatal error
-     *  that prevents this component from being used
+     * @throws LifecycleException if this component detects a fatal error
+     *                            that prevents this component from being used
      */
     public void start() throws LifecycleException {
 
@@ -774,8 +769,8 @@ public final class StandardServer
      * instance of this component.  It should also send a LifecycleEvent
      * of type STOP_EVENT to any registered listeners.
      *
-     * @exception LifecycleException if this component detects a fatal error
-     *  that needs to be reported
+     * @throws LifecycleException if this component detects a fatal error
+     *                            that needs to be reported
      */
     public void stop() throws LifecycleException {
 
@@ -810,34 +805,38 @@ public final class StandardServer
      * Invoke a pre-startup initialization. This is used to allow connectors
      * to bind to restricted ports under Unix operating environments.
      */
+    /**
+     * @Author shenwei
+     * @Date 2018/1/25 17:27
+     * @Description 初始化server
+     */
     public void initialize()
-        throws LifecycleException
-    {
+            throws LifecycleException {
         if (initialized) {
-                log.info(sm.getString("standardServer.initialize.initialized"));
+            log.info(sm.getString("standardServer.initialize.initialized"));
             return;
         }
         lifecycle.fireLifecycleEvent(INIT_EVENT, null);
         initialized = true;
 
-        if( oname==null ) {
+        if (oname == null) {
             try {
-                oname=new ObjectName( "Catalina:type=Server");
+                oname = new ObjectName("Catalina:type=Server");
                 Registry.getRegistry(null, null)
-                    .registerComponent(this, oname, null );
+                        .registerComponent(this, oname, null);
             } catch (Exception e) {
-                log.error("Error registering ",e);
+                log.error("Error registering ", e);
             }
         }
 
         // Register global String cache
         try {
             ObjectName oname2 =
-                new ObjectName(oname.getDomain() + ":type=StringCache");
+                    new ObjectName(oname.getDomain() + ":type=StringCache");
             Registry.getRegistry(null, null)
-                .registerComponent(new StringCache(), oname2, null );
+                    .registerComponent(new StringCache(), oname2, null);
         } catch (Exception e) {
-            log.error("Error registering ",e);
+            log.error("Error registering ", e);
         }
 
         // Initialize our defined Services
@@ -862,9 +861,9 @@ public final class StandardServer
 
     public ObjectName preRegister(MBeanServer server,
                                   ObjectName name) throws Exception {
-        oname=name;
-        mserver=server;
-        domain=name.getDomain();
+        oname = name;
+        mserver = server;
+        domain = name.getDomain();
         return name;
     }
 
